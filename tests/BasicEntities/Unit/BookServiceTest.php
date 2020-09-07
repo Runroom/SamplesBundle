@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Runroom\SamplesBundle\Tests\BasicEntities\Unit;
 
+use Knp\Component\Pager\PaginatorInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -30,11 +31,18 @@ class BookServiceTest extends TestCase
     /** @var BookService */
     private $service;
 
+    /** @var PaginatorInterface */
+    private $paginator;
+
     protected function setUp(): void
     {
         $this->repository = $this->prophesize(BookRepository::class);
+        $this->paginator = $this->createMock(PaginatorInterface::class);
 
-        $this->service = new BookService($this->repository->reveal());
+        $this->service = new BookService(
+            $this->repository->reveal(),
+            $this->paginator
+        );
     }
 
     /** @test */
